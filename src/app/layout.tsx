@@ -16,7 +16,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      {/* Create body with 100% vh */}
+      <body className={`flex flex-col h-screen text-gray-500 ${inter.className}`}>
+        {children}
+        <footer className="text-center text-sm border-black border-4">
+          <p>
+            Built by {" "}
+            <a
+              href="https://github.com/bead-code"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500"
+            >
+              Bead
+            </a>
+          </p>
+        </footer>
+      </body>
     </html>
   );
 }
