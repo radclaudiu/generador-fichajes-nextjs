@@ -2,13 +2,19 @@ import Link from "next/link";
 import { Company } from "../lib/definitions";
 import { deleteCompany, fetchCompanies } from "../lib/data";
 import { MainTitle } from "../ui/titles";
+import { logout } from "../lib/auth";
 
 export default async function CompaniesPage() {
     const companies: Company[] = await fetchCompanies();
 
     return (
         <section className="flex flex-col items-center justify-center h-screen flex-grow">
-            <button className='bg-red-500 hover:bg-red-600 text-white m-5 p-2 rounded' >Cerrar sesión</button>
+            <a
+                href={'/api/logout'}	
+                className='bg-red-500 hover:bg-red-600 text-white m-5 p-2 rounded'
+            >
+                Cerrar sesión
+            </a>
             <MainTitle>Empresas</MainTitle>
             <div className="grid auto-rows-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 rows justify-evenly gap-4 max-h-[60vh] max-w-[60vw] w-full overflow-y-scroll mt-auto flex-grow">
                 {companies.map((company) => (
