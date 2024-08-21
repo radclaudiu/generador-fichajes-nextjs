@@ -2,16 +2,16 @@ import Link from 'next/link';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Employee } from '@/app/lib/definitions';
-import { fetchEmployees } from '@/app/lib/data';
+import { fetchCompany, fetchEmployeesByCompany } from '@/app/lib/data';
 import { MainTitle } from '@/app/ui/titles';
 
-export default async function EmployeesPage({ params }: { params: { companyName: string } }) {
-  const companyName = params.companyName;
-  const employees: Employee[] = await fetchEmployees(companyName);
+export default async function EmployeesPage({ params }: { params: { companyId: number } }) {
+  const company = await fetchCompany(params.companyId);
+  const employees: Employee[] = await fetchEmployeesByCompany(company.id);
   return (
     <section className="flex flex-col items-center align-middle justify-center h-screen flex-grow mx-7">
       <Link className='bg-blue-500 hover:bg-blue-600 text-white m-5 p-2 rounded ' href="/companies">Volver a empresas</Link>
-      <MainTitle>Empleados de {companyName}</MainTitle>
+      <MainTitle>Empleados de {company.name}</MainTitle>
       <div className="grid auto-rows-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 rows justify-evenly gap-4 max-h-[60vh] max-w-[60vw] w-full overflow-y-scroll mt-auto flex-grow">
         {employees.map((employee) => (
           <div key={employee.name}>
