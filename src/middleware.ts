@@ -8,7 +8,6 @@ export default async function middleware(req: NextRequest) {
     const session = req.cookies.get('session')?.value;
     const baseUrl = req.url.split('?')[0];
     const domain = req.headers.get('host');
-    console.log('domain', domain);
     
     if (!req.url.includes('login') && !session) {
         return NextResponse.redirect(`http://${domain}/login`);
