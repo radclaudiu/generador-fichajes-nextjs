@@ -9,8 +9,8 @@ export default async function EmployeesPage({ params }: { params: { companyName:
   const employees: Employee[] = await fetchEmployees(companyName);
   return (
     <section className="flex flex-col items-center align-middle justify-center h-screen flex-grow mx-7">
-      <h1>Empleados de {companyName}</h1>
-      <div className="grid auto-rows-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 rows justify-evenly gap-4 max-h-[60vh] max-w-[60vw] w-full overflow-y-scroll">
+      <h1 className='m-5'>Empleados de {companyName}</h1>
+      <div className="grid auto-rows-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 rows justify-evenly gap-4 max-h-[60vh] max-w-[60vw] w-full overflow-y-scroll mt-auto">
         {employees.map((employee) => (
           <div key={employee.name} className="bg-white p-4 rounded shadow">
             <h2 className='text-black font-bold'>{employee.name}</h2>
@@ -26,7 +26,7 @@ export default async function EmployeesPage({ params }: { params: { companyName:
           </div>
         ))}
       </div>
-      <div className='w-full flex justify-end max-w-[60vw]'>
+      <div className='w-full flex justify-end max-w-[60vw] mb-auto'>
         <button className="bg-blue-500 text-white p-2 rounded mt-4">Nuevo empleado</button>
       </div>
     </section>
