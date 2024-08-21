@@ -25,3 +25,13 @@ export async function fetchCompanies(): Promise<Company[]> {
     throw new Error('Failed to fetch companies data.');
   }
 }
+
+export async function deleteCompany(id: number): Promise<void> {
+  try {
+    await sql`DELETE FROM companies WHERE id = ${id}`;
+  } catch (error) {
+    console.log('Database Error:', error);
+    console.log(error);
+    throw new Error('Failed to delete company.');
+  }
+}
