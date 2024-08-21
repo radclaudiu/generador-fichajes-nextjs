@@ -25,9 +25,8 @@ export async function login(formData: FormData) {
 
     // Verify credentials && get user data
     const user = await verifyUser(formData);
-
     if (!user) {
-        return { error: 'Invalid credentials' };
+        return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
     // Create the session
     const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // 1 week
