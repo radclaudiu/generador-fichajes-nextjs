@@ -7,33 +7,33 @@ export default function CompaniesPage() {
             id: 1,
             name: "Company 1",
             cif: "12345678A",
-            direccion: "Calle Falsa 123",
+            address: "Calle Falsa 123",
             cp: "12345",
-            ciudad: "Springfield"
+            city: "Springfield"
         },
         {
             id: 2,
             name: "Company 2",
             cif: "87654321B",
-            direccion: "Calle Falsa 456",
+            address: "Calle Falsa 456",
             cp: "54321",
-            ciudad: "Shelbyville"
+            city: "Shelbyville"
         },
         {
             id: 3,
             name: "Company 3",
             cif: "11111111C",
-            direccion: "Calle Falsa 789",
+            address: "Calle Falsa 789",
             cp: "67890",
-            ciudad: "Ogdenville"
+            city: "Ogdenville"
         },
         {
             id: 4,
             name: "Company 4",
             cif: "22222222D",
-            direccion: "Calle Falsa 1011",
+            address: "Calle Falsa 1011",
             cp: "11213",
-            ciudad: "North Haverbrook"
+            city: "North Haverbrook"
         }
     ];
     // Create page with a list of cards to show companies with 4 buttons to edit, delete, view and create a new company
@@ -45,9 +45,9 @@ export default function CompaniesPage() {
                     <div key={company.name} className="bg-white p-4 rounded shadow">
                         <h2 className="text-black font-bold">{company.name}</h2>
                         <p>CIF: {company.cif}</p>
-                        <p>Dirección: {company.direccion}</p>
+                        <p>Dirección: {company.address}</p>
                         <p>CP: {company.cp}</p>
-                        <p>Ciudad: {company.ciudad}</p>
+                        <p>Ciudad: {company.city}</p>
                         <div className="flex align-bottom mt-4 gap-2 flex-wrap min-w-36 max-w-96">
                             <Link className="bg-green-500 hover:bg-green-600 text-white p-2 rounded" href={`/companies/${company.id}/employees`}>Ver Empleados</Link>
                             <Link className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded" href={"/"}>Editar</Link>
