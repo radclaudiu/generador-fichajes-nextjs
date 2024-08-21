@@ -3,13 +3,14 @@ export type Employee = {
     name: string;
     dni: string;
     nss: string;
+    companyId: number;
 }
 
 export type Company = {
     id: number;
     name: string;
     cif: string;
-    direccion: string;
+    address: string;
     cp: string;
-    ciudad: string;
+    city: string;
 }
