@@ -5,13 +5,9 @@ import { logout } from '@/app/lib/auth'; // Ajusta la ruta según tu estructura
 
 export async function GET(req: NextRequest) {
   try {
-      // Elimina la cookie de sesión
+      const baseUrl = `http://${req.headers.get('host')}`;
       await logout();
-      // Redirige al usuario a la página de inicio de sesión
-      const session = req.cookies.get('session')?.value;
-      const baseUrl = req.url.split('?')[0];
-      const domain = req.headers.get('host');
-      return NextResponse.redirect(`http://${domain}/login`);
+      return NextResponse.redirect(`${baseUrl}/login`);
   } catch (error) {
       console.error('Failed to log out:', error);
       return NextResponse.json({ error: 'Failed to log out' }, { status: 500 });

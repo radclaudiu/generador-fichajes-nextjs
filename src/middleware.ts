@@ -6,19 +6,19 @@ import { JWTClaimValidationFailed } from 'jose/errors';
 
 export default async function middleware(req: NextRequest) {
     const session = req.cookies.get('session')?.value;
-    const baseUrl = req.url.split('?')[0];
-    const domain = req.headers.get('host');
+    const baseUrl = `http://${req.headers.get('host')}`;
+    console.log('domain', `popopopopopopopop -- ${req.url}`);
     
     if (req.url.includes('api') && !req.url.includes('login') && !session) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     if (!req.url.includes('login') && !req.url.includes('api') && !session) {
-        return NextResponse.redirect(`${process.env.BASE_URL}/login`);
+        return NextResponse.redirect(`${baseUrl}/login`);
     }
    
     if (req.url.includes('login') && !req.url.includes('api') && session) {
-        return NextResponse.redirect(`${process.env.BASE_URL}/companies`);
+        return NextResponse.redirect(`${baseUrl}/companies`);
     }
     try {
         return await updateSession(req);
@@ -31,7 +31,7 @@ export default async function middleware(req: NextRequest) {
                 expires: new Date(0),
                 httpOnly: true,
             });
-            return NextResponse.redirect(`http://${domain}/login`);
+            return NextResponse.redirect(`${baseUrl}/login`);
         }
     }
 }
