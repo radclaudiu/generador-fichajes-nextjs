@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   try {
       const baseUrl = `http://${req.headers.get('host')}`;
       await logout();
-      return NextResponse.redirect(`${baseUrl}/login`);
+      return NextResponse.json({ message: 'Logged out' }, { status: 200 });
   } catch (error) {
       console.error('Failed to log out:', error);
       return NextResponse.json({ error: 'Failed to log out' }, { status: 500 });
