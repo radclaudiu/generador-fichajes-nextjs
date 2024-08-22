@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { Company } from "../lib/definitions";
-import { deleteCompany, fetchCompanies } from "../lib/data";
-import { MainTitle } from "../ui/titles";
-import { logout } from "../lib/auth";
+import { Company } from "@/app/lib/definitions";
+import { fetchCompanies } from "@/app/api/v0/companies/route";
+import { MainTitle } from "@/app/ui/titles";
 
 export default async function CompaniesPage() {
     const companies: Company[] = await fetchCompanies();
