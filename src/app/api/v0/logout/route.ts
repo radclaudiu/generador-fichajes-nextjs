@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { logout } from '../../lib/auth'; // Ajusta la ruta según tu estructura
+import { logout } from '@/app/lib/auth'; // Ajusta la ruta según tu estructura
 
 
 export async function GET(req: NextRequest) {
