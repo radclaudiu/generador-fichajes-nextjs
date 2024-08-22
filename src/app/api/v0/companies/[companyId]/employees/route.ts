@@ -1,7 +1,6 @@
 import { sql } from '@vercel/postgres';
 import {
-    Employee,
-    Company
+    Employee
 } from '@/app/lib/definitions';
 import { NextResponse } from 'next/server';
 

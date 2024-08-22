@@ -3,7 +3,6 @@ import {
   Company
 } from '@/app/lib/definitions';
 import { NextResponse } from 'next/server';
-import { Console } from 'console';
 
 export async function fetchCompany(companyId: number): Promise<Company | null> {
   try {
