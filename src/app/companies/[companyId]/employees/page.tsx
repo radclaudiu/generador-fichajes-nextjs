@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import { Employee } from '@/app/lib/definitions';
-import { fetchCompany } from '@/app/api/v0/companies/[companyId]/route';
-import { fetchCompanyEmployees } from '@/app/api/v0/companies/[companyId]/employees/route';
+import { fetchCompany, fetchCompanyEmployees } from '@/app/lib/data/companies';
 import { MainTitle } from '@/app/ui/titles';
 
 export default async function EmployeesPage({ params }: { params: { companyId: number } }) {

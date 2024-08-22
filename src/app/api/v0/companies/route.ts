@@ -4,28 +4,7 @@ import {
   Company
 } from '@/app/lib/definitions';
 import { NextResponse } from 'next/server';
-
-
-export async function fetchCompanies(): Promise<Company[]> {
-  try {
-    const data = await sql<Company>`SELECT * FROM companies`;
-    return data.rows;
-  } catch (error) {
-    console.log('Database Error:', error);
-    console.log(error);
-    throw new Error('Failed to fetch companies data.');
-  }
-}
-
-export async function createCompany(company: Company): Promise<Company> {
-  try {
-    const data = await sql<Company>`INSERT INTO companies (name) VALUES (${company.name}) RETURNING *`;
-    return data.rows[0];
-  } catch (error) {
-    console.log('Database Error:', error);
-    throw new Error('Failed to create company.');
-  }
-}
+import { createCompany, fetchCompanies } from '@/app/lib/data/companies';
 
 export async function GET(): Promise<NextResponse> {
   try {

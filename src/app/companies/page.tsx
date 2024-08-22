@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Company } from "@/app/lib/definitions";
-import { fetchCompanies } from "@/app/api/v0/companies/route";
+import { fetchCompanies } from "@/app/lib/data/companies";
 import { MainTitle } from "@/app/ui/titles";
 
 export default async function CompaniesPage() {
