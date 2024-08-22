@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import React from 'react';
-import { useRouter } from 'next/router';
 import { Employee } from '@/app/lib/definitions';
 import { fetchCompany } from '@/app/api/v0/companies/[companyId]/route';
 import { fetchCompanyEmployees } from '@/app/api/v0/companies/[companyId]/employees/route';
@@ -8,6 +7,9 @@ import { MainTitle } from '@/app/ui/titles';
 
 export default async function EmployeesPage({ params }: { params: { companyId: number } }) {
   const company = await fetchCompany(params.companyId);
+  if (!company) {
+    return <div>Empresa no encontrada</div>;
+  }
   const employees: Employee[] = await fetchCompanyEmployees(company.id);
   return (
     <section className="flex flex-col items-center align-middle justify-center h-screen flex-grow mx-7">
