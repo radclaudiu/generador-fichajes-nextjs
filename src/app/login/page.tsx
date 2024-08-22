@@ -1,4 +1,4 @@
-import { login } from "../lib/auth";
+import { login } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
 
 export default function LoginPage() {

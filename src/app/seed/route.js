@@ -1,5 +1,5 @@
 import { db } from '@vercel/postgres';
-import { companies, employees } from '../lib/placeholder-data';
+import { companies, employees } from '@/app/lib/placeholder-data';
 
 const client = await db.connect();
 
