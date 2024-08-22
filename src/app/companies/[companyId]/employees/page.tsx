@@ -2,12 +2,13 @@ import Link from 'next/link';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Employee } from '@/app/lib/definitions';
-import { fetchCompany, fetchEmployeesByCompany } from '@/app/lib/data';
+import { fetchCompany } from '@/app/api/v0/companies/[companyId]/route';
+import { fetchCompanyEmployees } from '@/app/api/v0/companies/[companyId]/employees/route';
 import { MainTitle } from '@/app/ui/titles';
 
 export default async function EmployeesPage({ params }: { params: { companyId: number } }) {
   const company = await fetchCompany(params.companyId);
-  const employees: Employee[] = await fetchEmployeesByCompany(company.id);
+  const employees: Employee[] = await fetchCompanyEmployees(company.id);
   return (
     <section className="flex flex-col items-center align-middle justify-center h-screen flex-grow mx-7">
       <Link className='bg-blue-500 hover:bg-blue-600 text-white m-5 p-2 rounded ' href="/companies">Volver a empresas</Link>
