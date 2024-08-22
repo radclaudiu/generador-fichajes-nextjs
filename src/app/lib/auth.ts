@@ -21,7 +21,7 @@ export async function decrypt(input: string): Promise<any> {
     return payload;
 }
 
-export async function login(formData: FormData) {
+export async function login(formData: FormData): Promise<NextResponse | void> {
 
     // Verify credentials && get user data
     const user = await verifyUser(formData);
