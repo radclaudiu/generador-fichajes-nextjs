@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import { Company, Employee, Check } from "@/app/lib/definitions";
 import { createChecks } from "./data/employees";
 
@@ -123,7 +123,7 @@ export function generatePDF(company: Company, employee: Employee, start: Date, e
 
 
     // Añadir la tabla al PDF
-    doc.autoTable({
+    autoTable(doc, {
         head: [['Fecha', 'Entrada', 'Salida', 'Horas']],
         body: tableData,
         startY: 75
@@ -136,7 +136,7 @@ export function generatePDF(company: Company, employee: Employee, start: Date, e
         return total + (check.end_time.getTime() - check.start_time.getTime()) / 3600000;
     }, 0);
 
-    const finalY = doc.lastAutoTable.finalY || 75;
+    const finalY = (doc as any).lastAutoTable.finalY || 75;
 
     // Añadir el total de horas al PDF sin usar ninguna librería
     doc.text(`Total de horas: ${totalHours.toFixed(2)}`, 15, finalY + 10);

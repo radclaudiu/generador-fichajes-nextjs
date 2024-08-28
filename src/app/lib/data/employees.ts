@@ -79,7 +79,7 @@ export async function createChecks(checks: Check[]): Promise<void> {
 
 export async function createVacation(vacation: Vacation): Promise<Vacation> {
     try {
-        const data = await sql<Vacation>`INSERT INTO vacations (start_date, end_date, employee_id) VALUES (${vacation.start_date}, ${vacation.end_date}, ${vacation.employee_id}) RETURNING *`;
+        const data = await sql<Vacation>`INSERT INTO vacations (start_date, end_date, employee_id) VALUES (${vacation.start_date.toISOString().split("T")[0]}, ${vacation.end_date.toISOString().split("T")[0]}, ${vacation.employee_id}) RETURNING *`;
         return data.rows[0];
     } catch (error) {
         console.log('Database Error:', error);
