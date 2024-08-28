@@ -1,5 +1,6 @@
 import { Company, Employee } from "@/app/lib/definitions";
 import { sql } from "@vercel/postgres";
+import { fetchEmployeeChecks, fetchEmployeeVacations } from "@/app/lib/data/employees";
 
 export async function fetchCompanies(): Promise<Company[]> {
     try {
@@ -14,6 +15,10 @@ export async function fetchCompanies(): Promise<Company[]> {
 export async function fetchCompanyEmployees(companyId: number): Promise<Employee[]> {
     try {
         const data = await sql<Employee>`SELECT * FROM employees WHERE company_id = ${companyId}`;
+        for (const employee of data.rows) {
+            employee.vacations = await fetchEmployeeVacations(employee.id);
+            employee.checks = await fetchEmployeeChecks(employee.id);
+        }
         return data.rows;
     } catch (error) {
         console.log('Database Error:', error);
