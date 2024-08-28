@@ -1,12 +1,54 @@
 import Link from "next/link";
 import { Company } from "@/app/lib/definitions";
-import { fetchCompanies } from "@/app/lib/data/companies";
+import { createCompany, deleteCompany, fetchCompanies, updateCompany } from "@/app/lib/data/companies";
 import { MainTitle } from "@/app/ui/titles";
-import { LogoutButton } from "../ui/buttons";
+import { LogoutButton } from "@/app/ui/buttons";
+import CompanyModal from "@/app/ui/companyModal";
 
-export default async function CompaniesPage() {
+type SearchParamProps = {
+    searchParams: Record<string, string> | null | undefined;
+};
+
+const handleCreateCompany = async (company : Company) => {
+    "use server";
+    try {
+        console.log("Creating company", company);
+        // create company
+        await createCompany(company);
+
+    } catch (error) {
+        console.log("Error creating company", error);
+    }
+};
+const handleModifyCompany = async (company : Company) => {
+    "use server";
+    try {
+        console.log("Updating company", company);
+        // Update company
+        await updateCompany(company.id, company);
+
+    } catch (error) {
+        console.log("Error updating company", error);
+    }
+};
+const handleDeleteCompany = async (company : Company) => {
+    "use server";
+    try {
+        console.log("Deleting company", company);
+        // Update company
+        await deleteCompany(company.id);
+
+    } catch (error) {
+        console.log("Error deleting company", error);
+    }
+};
+
+export default async function CompaniesPage({ searchParams }: SearchParamProps) {
     const companies: Company[] = await fetchCompanies();
-
+    const showModal = searchParams?.show;
+    const editModal = searchParams?.edit;
+    const deleteModal = searchParams?.delete;
+    const baseURL = `/companies`;
     return (
         <section className="flex flex-col items-center justify-center h-screen flex-grow">
             <LogoutButton> Cerrar sesión </LogoutButton>
@@ -22,8 +64,9 @@ export default async function CompaniesPage() {
                             <p>Ciudad: {company.city}</p>
                             <div className="flex align-bottom mt-4 gap-2 flex-wrap min-w-36 max-w-96">
                                 <Link className="bg-green-500 hover:bg-green-600 text-white p-2 rounded" href={`/companies/${company.id}/employees`}>Ver Empleados</Link>
-                                <button className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded" >Editar</button>
-                                <button className="bg-red-500 hover:bg-red-600 text-white p-2 rounded" >Eliminar</button>
+                                <Link href={`/companies?edit=${company.id}`} className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded" >Editar</Link>
+                                {/* Create delete button to delete a company knowing that we are in a server side rendering*/}
+                                <Link href={`/companies/?delete=${company.id}`} className="bg-red-500 hover:bg-red-600 text-white p-2 rounded">Eliminar</Link>
                             </div>
                         </div>
                     </div>
@@ -31,8 +74,16 @@ export default async function CompaniesPage() {
             </div>
 
             <div className='w-full flex justify-end max-w-[60vw] mb-auto'>
-                <button className="bg-blue-500 text-white p-2 rounded mt-4">Nueva empresa</button>
+                <Link href={"/companies?show=true"} className="bg-blue-500 text-white p-2 rounded mt-4">Nueva empresa</Link>
             </div>
+            {showModal && <CompanyModal title="Crear empresa" baseURL={baseURL} handleSubmitCompany={handleCreateCompany} />}
+            {editModal && <CompanyModal title="Editar empresa" baseURL={baseURL} handleSubmitCompany={handleModifyCompany} initialCompany={
+                companies.find((company) => company.id === parseInt(editModal))
+            }/>}
+            {deleteModal && <CompanyModal title="Eliminar empresa" baseURL={baseURL} handleSubmitCompany={handleDeleteCompany} initialCompany={
+                companies.find((company) => company.id === parseInt(deleteModal))
+            } deleteCompany={true}/>}
+
         </section>
 
     );
