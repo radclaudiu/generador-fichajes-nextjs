@@ -20,8 +20,8 @@ async function seedCompanies() {
   const insertedCompanies = await Promise.all(
     companies.map(
       (company) => client.sql`
-        INSERT INTO companies (id, name, cif, address, cp, city)
-        VALUES (${company.id}, ${company.name}, ${company.cif}, ${company.address}, ${company.cp}, ${company.city})
+        INSERT INTO companies (name, cif, address, cp, city)
+        VALUES (${company.name}, ${company.cif}, ${company.address}, ${company.cp}, ${company.city})
         ON CONFLICT (id) DO NOTHING;
       `,
     ),
@@ -39,17 +39,52 @@ async function seedEmployees() {
       name VARCHAR(255) NOT NULL,
       dni VARCHAR(25) NOT NULL UNIQUE,
       nss VARCHAR(255) NOT NULL UNIQUE,
+      monday_in TIME,
+      monday_out TIME,
+      tuesday_in TIME,
+      tuesday_out TIME,
+      wednesday_in TIME,
+      wednesday_out TIME,
+      thursday_in TIME,
+      thursday_out TIME,
+      friday_in TIME,
+      friday_out TIME,
+      saturday_in TIME,
+      saturday_out TIME,
+      sunday_in TIME,
+      sunday_out TIME,
       company_id INT REFERENCES companies(id) ON DELETE CASCADE
+    );
+  `;
+
+  await client.sql`
+     CREATE TABLE IF NOT EXISTS vacations (
+      id SERIAL PRIMARY KEY,
+      employee_id INT REFERENCES employees(id) ON DELETE CASCADE,
+      start_date DATE NOT NULL,
+      end_date DATE NOT NULL
+    );
+  `;
+
+  await client.sql`
+     CREATE TABLE IF NOT EXISTS checks (
+      id SERIAL PRIMARY KEY,
+      date DATE NOT NULL,
+      start_time TIME NOT NULL,
+      end_time TIME NOT NULL,
+      employee_id INT REFERENCES employees(id) ON DELETE CASCADE
     );
   `;
 
   const insertedEmployees = await Promise.all(
     employees.map(async (employee) => {
-      return client.sql`
-        INSERT INTO employees (id, name, dni, nss, company_id)
-        VALUES (${employee.id}, ${employee.name}, ${employee.dni}, ${employee.nss}, ${employee.companyId})
-        ON CONFLICT (id) DO NOTHING;
+      await client.sql`
+      INSERT INTO employees (name, dni, nss, company_id)
+      VALUES (${employee.name}, ${employee.dni}, ${employee.nss}, ${employee.companyId})
+      ON CONFLICT (id) DO NOTHING;
       `;
+      console.log("Created employee",employee);
+      return employee;
     }),
   );
 
@@ -58,6 +93,12 @@ async function seedEmployees() {
 
 export async function GET() {
   try {
+    // remove all data from the tables
+    await client.sql`DROP TABLE IF EXISTS vacations`;
+    await client.sql`DROP TABLE IF EXISTS checks`;
+    await client.sql`DROP TABLE IF EXISTS employees`;
+    await client.sql`DROP TABLE IF EXISTS companies`;
+
     await client.sql`BEGIN`;
     await seedCompanies();
     await seedEmployees();
