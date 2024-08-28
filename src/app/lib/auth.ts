@@ -37,6 +37,7 @@ export async function login(formData: FormData): Promise<NextResponse | void> {
         expires: expires,
         httpOnly: true,
     });
+    return NextResponse.json({ "message": "Logged in" }, { status: 200 });
 }
 
 export async function logout() {
