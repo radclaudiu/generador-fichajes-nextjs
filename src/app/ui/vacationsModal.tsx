@@ -3,13 +3,12 @@ import { useState } from "react";
 import { Modal } from "./modal";
 import { Employee, Vacation } from "../lib/definitions";
 
-function VacationsDateField({ text, value, onChange }: { text: string, value: string, onChange: (e: any) => void }) {
+function VacationsDateField({ text, onChange }: { text: string, onChange: (e: any) => void }) {
     return (
         <div className="flex gap-2">
             <p className="mr-auto">{text}</p>
             <input
                 type="date"
-                value={value}
                 onChange={onChange}
                 className="border border-gray-300 rounded p-1 w-48"
                 required
@@ -39,8 +38,8 @@ export function VacationsModal({ title, baseURL, employee, handleSubmitVacations
             submitable={submitable}
         >
             <form className="flex flex-col gap-2">
-                <VacationsDateField text="Inicio" value={vacation.start_date} onChange={(e) => setVacation({...vacation, start_date: e.target.value})} />
-                <VacationsDateField text="Fin" value={vacation.end_date} onChange={(e) => setVacation({...vacation, end_date: e.target.value})} />
+                <VacationsDateField text="Inicio" onChange={(e) => setVacation({...vacation, start_date: e.target.value})} />
+                <VacationsDateField text="Fin" onChange={(e) => setVacation({...vacation, end_date: e.target.value})} />
             </form>
         </Modal>
     )}</div>);
