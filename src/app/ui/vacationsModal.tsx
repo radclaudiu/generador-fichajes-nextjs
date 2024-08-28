@@ -20,8 +20,8 @@ function VacationsDateField({ text, value, onChange }: { text: string, value: st
 
 export function VacationsModal({ title, baseURL, employee, handleSubmitVacations, initialVacation = {
     id: 0,
-    start_date: "",
-    end_date: "",
+    start_date: new Date(),
+    end_date: new Date(),
     employee_id: employee.id
 }, cancelText, submitText }: { title: string, baseURL: string, employee: Employee, handleSubmitVacations: (vacation: Vacation) => void, initialVacation?: Vacation, cancelText?: string, submitText?: string }) {
     const [showModal, setShowModal] = useState(true);
@@ -67,7 +67,8 @@ export function ShowVacationsModal({ title, baseURL, vacations, cancelText }: { 
             <div className="flex flex-col gap-2">
                 {vacations.map((vacation) => (
                     <div key={vacation.id} className="flex gap-2">
-                        <p>{vacation.start_date} - {vacation.end_date}</p>
+                        <p>Inicio: {vacation.start_date.toISOString().split("T")[0]}</p>
+                        <p>Fin: {vacation.end_date.toISOString().split("T")[0]}</p>
                     </div>
                 ))}
             </div>

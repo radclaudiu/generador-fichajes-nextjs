@@ -24,8 +24,8 @@ export type Employee = {
 
 export type Vacation = {
     id: number;
-    start_date: string;
-    end_date: string;
+    start_date: Date;
+    end_date: Date;
     employee_id: number;
 }
 
