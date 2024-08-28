@@ -5,7 +5,6 @@ import { logout } from '@/app/lib/auth'; // Ajusta la ruta según tu estructura
 
 export async function POST(req: NextRequest) {
   try {
-      const baseUrl = `http://${req.headers.get('host')}`;
       await logout();
       return NextResponse.json({ message: 'Logged out' }, { status: 200 });
   } catch (error) {
