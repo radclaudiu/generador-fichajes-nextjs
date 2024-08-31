@@ -50,7 +50,22 @@ export function ShowVacationsModal({ title, baseURL, vacations, cancelText }: { 
     console.log("----", vacations);
 
     if (!vacations) {
-        return <div>No hay vacaciones</div>;
+        return (<div>{showModal && (
+            <Modal
+                title={title}
+                onClose={() => setShowModal(false)}
+                cancelText={cancelText ?? "Cerrar"}
+                submitText=""
+                baseURL={baseURL}
+                submitable={false}
+                onSubmit={() => { }}
+            >
+                <div className="flex flex-col gap-2">
+                    No se han encontrado vacaiones.
+                </div>
+            </Modal>
+        )}</div>)
+        ;
     }    
 
     return (<div>{showModal && (
