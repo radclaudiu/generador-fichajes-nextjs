@@ -81,18 +81,20 @@ export default async function EmployeesPage({ searchParams, params }: { searchPa
         <Link className='bg-blue-500 hover:bg-blue-600 text-white m-5 p-2 rounded' href="/companies">Volver a empresas</Link>
         <MainTitle>Empleados de {company.name}</MainTitle>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[60vh] max-w-[60vw] w-full overflow-y-scroll mt-auto flex-grow">
+        <div className="grid auto-rows-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 rows justify-evenly gap-4 max-h-[60vh] max-w-[60vw] w-full overflow-y-scroll mt-auto flex-grow">
           {employees.map((employee) => (
-            <div key={employee.id} className="bg-white p-4 rounded shadow">
-              <h2 className='text-black font-bold'>{employee.name}</h2>
-              <p>DNI: {employee.dni}</p>
-              <p>NSS: {employee.nss}</p>
-              <div className="flex flex-wrap mt-4 gap-2">
-                <Link className="bg-green-500 hover:bg-green-600 text-white p-2 rounded" href={`${baseURL}?edit=${employee.id}`} >EDITAR HORARIO</Link>
-                <Link className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded" href={`${baseURL}?createVacationsModal=${employee.id}`} >AGREGAR VACACIONES</Link>
-                <Link className="bg-blue-400 hover:bg-blue-500 text-white p-2 rounded" href={`${baseURL}?showVacations=${employee.id}`} >VER VACACIONES</Link>
-                <Link className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded" href={`${baseURL}?generateChecksModal=${employee.id}`} >GENERAR FICHAJES</Link>
-                <Link className="bg-red-500 hover:bg-red-600 text-white p-2 rounded" href={`${baseURL}?delete=${employee.id}`} >ELIMINAR EMPLEADO</Link>
+            <div key={company.name}>
+              <div className="bg-white p-4 rounded shadow">
+                <h2 className='text-black font-bold'>{employee.name}</h2>
+                <p>DNI: {employee.dni}</p>
+                <p>NSS: {employee.nss}</p>
+                <div className="flex flex-wrap mt-4 gap-2">
+                  <Link className="bg-green-500 hover:bg-green-600 text-white p-2 rounded" href={`${baseURL}?edit=${employee.id}`} >EDITAR HORARIO</Link>
+                  <Link className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded" href={`${baseURL}?createVacationsModal=${employee.id}`} >AGREGAR VACACIONES</Link>
+                  <Link className="bg-blue-400 hover:bg-blue-500 text-white p-2 rounded" href={`${baseURL}?showVacations=${employee.id}`} >VER VACACIONES</Link>
+                  <Link className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded" href={`${baseURL}?generateChecksModal=${employee.id}`} >GENERAR FICHAJES</Link>
+                  <Link className="bg-red-500 hover:bg-red-600 text-white p-2 rounded" href={`${baseURL}?delete=${employee.id}`} >ELIMINAR EMPLEADO</Link>
+                </div>
               </div>
             </div>
           ))}
