@@ -138,9 +138,6 @@ export function generatePDF(company: Company, employee: Employee, start: Date, e
 
     const finalY = (doc as any).lastAutoTable.finalY || 75;
 
-    // Añadir el total de horas al PDF sin usar ninguna librería
-    doc.text(`Total de horas: ${totalHours.toFixed(2)}`, 15, finalY + 10);
-
     // Firma del empleado
     doc.text(`Estos fichajes han sido comprobados por el empleado. Firma : `, 15, finalY + 20);
 
