@@ -139,7 +139,7 @@ export function generatePDF(company: Company, employee: Employee, start: Date, e
     const finalY = (doc as any).lastAutoTable.finalY || 75;
 
     // Firma del empleado
-    doc.text(`Estos fichajes han sido comprobados por el empleado. Firma : `, 15, finalY + 20);
+    doc.text(`Estos fichajes han sido comprobados por el empleado.\n Firma : `, 15, finalY + 20);
 
 
     doc.save(`fichajes_${employee.name}_${start.toISOString().split('T')[0]}_${end.toISOString().split('T')[0]}.pdf`);
