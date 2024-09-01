@@ -1,6 +1,7 @@
 import { Company, Employee } from "@/app/lib/definitions";
 import { sql } from "@vercel/postgres";
 import { fetchEmployeeChecks, fetchEmployeeVacations } from "@/app/lib/data/employees";
+import { revalidatePath } from "next/cache";
 
 export async function fetchCompanies(): Promise<Company[]> {
     try {
@@ -43,6 +44,7 @@ export async function fetchCompany(companyId: number): Promise<Company | null> {
 export async function createCompany(company: Company): Promise<Company> {
     try {
         const data = await sql<Company>`INSERT INTO companies (name, cif, address, cp, city) VALUES (${company.name}, ${company.cif}, ${company.address}, ${company.cp}, ${company.city}) RETURNING *`;
+        revalidatePath('/companies');
         return data.rows[0];
     } catch (error) {
         console.log('Database Error:', error);
@@ -54,6 +56,7 @@ export async function createCompany(company: Company): Promise<Company> {
 export async function updateCompany(companyId: number, company: Company): Promise<Company> {
     try {
         const data = await sql<Company>`UPDATE companies SET name = ${company.name}, cif = ${company.cif},address = ${company.address},cp = ${company.cp},city = ${company.city} WHERE id = ${companyId} RETURNING *`;
+        revalidatePath('/companies');
         return data.rows[0];
     } catch (error) {
         console.log('Database Error:', error);
@@ -64,6 +67,7 @@ export async function updateCompany(companyId: number, company: Company): Promis
 export async function deleteCompany(companyId: number): Promise<void> {
     try {
         await sql`DELETE FROM companies WHERE id = ${companyId}`;
+        revalidatePath('/companies');
     } catch (error) {
         console.log('Database Error:', error);
         console.log(error);
