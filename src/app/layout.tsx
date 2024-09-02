@@ -21,7 +21,7 @@ export default function RootLayout({
       {/* Create body with 100% vh */}
       <body className={`flex flex-col h-screen text-gray-500 ${inter.className}`}>
         {children}
-        <footer className="text-center text-sm border-black border-4">
+        {/* <footer className="text-center text-sm border-black border-4">
           <p>
             Built by {" "}
             <a
@@ -33,7 +33,7 @@ export default function RootLayout({
               Bead
             </a>
           </p>
-        </footer>
+        </footer> */}
       </body>
     </html>
   );
