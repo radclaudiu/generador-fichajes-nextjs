@@ -54,7 +54,7 @@ export function generatePDF(company: Company, employee: Employee, start: Date, e
 
     // Título
     doc.setFontSize(18);
-    doc.text('Registro de fichajes', 115, 15, { align: 'center' });
+    doc.text('Registro de fichajes', 105, 15, { align: 'center' });
 
     // Datos de la empresa
     doc.setFontSize(12);
