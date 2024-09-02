@@ -38,8 +38,8 @@ export function VacationsModal({ title, baseURL, employee, handleSubmitVacations
             submitable={submitable}
         >
             <form className="flex flex-col gap-2">
-                <VacationsDateField text="Inicio" onChange={(e) => setVacation({...vacation, start_date: e.target.value})} />
-                <VacationsDateField text="Fin" onChange={(e) => setVacation({...vacation, end_date: e.target.value})} />
+                <VacationsDateField text="Inicio" onChange={(e) => setVacation({...vacation, start_date: new Date(e.target.value)})} />
+                <VacationsDateField text="Fin" onChange={(e) => setVacation({...vacation, end_date: new Date(e.target.value)})} />
             </form>
         </Modal>
     )}</div>);
@@ -47,9 +47,8 @@ export function VacationsModal({ title, baseURL, employee, handleSubmitVacations
 
 export function ShowVacationsModal({ title, baseURL, vacations, cancelText }: { title: string, baseURL: string, vacations: Vacation[], cancelText?: string }) {
     const [showModal, setShowModal] = useState(true);
-    console.log("----", vacations);
 
-    if (!vacations) {
+    if (vacations.length === 0) {
         return (<div>{showModal && (
             <Modal
                 title={title}
@@ -61,7 +60,7 @@ export function ShowVacationsModal({ title, baseURL, vacations, cancelText }: { 
                 onSubmit={() => { }}
             >
                 <div className="flex flex-col gap-2">
-                    No se han encontrado vacaiones.
+                    No se han encontrado vacaciones.
                 </div>
             </Modal>
         )}</div>)
