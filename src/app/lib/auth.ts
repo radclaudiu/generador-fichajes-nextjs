@@ -33,7 +33,7 @@ export async function login(formData: FormData): Promise<NextResponse | void> {
     const session = await encrypt({ user, expires });
 
     // Set the session cookie
-    cookies().set('session', session, {
+    cookies().set('checks-generator-session', session, {
         expires: expires,
         httpOnly: true,
     });
@@ -41,27 +41,27 @@ export async function login(formData: FormData): Promise<NextResponse | void> {
 }
 
 export async function logout() {
-    cookies().set('session', '', {
+    cookies().set('checks-generator-session', '', {
         expires: new Date(0),
         httpOnly: true,
     });
 }
 
 export async function getSession() {
-    const session = cookies().get('session')?.value;
+    const session = cookies().get('checks-generator-session')?.value;
     if (!session) return null;
     return await decrypt(session);
 }
 
 export async function updateSession(req: NextRequest) {
-    const session = req.cookies.get('session')?.value;
+    const session = req.cookies.get('checks-generator-session')?.value;
     if (!session) return null;
 
     const parsed = await decrypt(session);
     const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // 1 week
     const res = NextResponse.next();
     res.cookies.set({
-        name: 'session',
+        name: 'checks-generator-session',
         value: await encrypt(parsed),
         expires,
         httpOnly: true,
