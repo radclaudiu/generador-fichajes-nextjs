@@ -6,7 +6,7 @@ import { Employee, Vacation } from '@/app/lib/definitions';
 
 // Data Fetching Functions
 import { fetchCompany, fetchCompanyEmployees } from '@/app/lib/data/companies';
-import { createEmployee, createVacation, deleteEmployee, fetchEmployee, updateEmployee } from '@/app/lib/data/employees';
+import { createEmployee, createVacation, deleteEmployee, deleteVacation, fetchEmployee, updateEmployee } from '@/app/lib/data/employees';
 
 // UI Components
 import { MainTitle } from '@/app/ui/titles';
@@ -65,6 +65,18 @@ const handleSubmitVacations = async (vacation: Vacation) => {
   }
 }
 
+const handleDeleteVacation = async (vacation: Vacation) => {
+  "use server";
+  console.log("Deleting vacation", vacation);
+  
+  try {
+    console.log("Deleting vacation", vacation);
+    await deleteVacation(vacation.id);
+  } catch (error) {
+    console.error("Error deleting vacation", error);
+  }
+}
+
 // Employees Page Component
 export default async function EmployeesPage({ searchParams, params }: { searchParams: SearchParamProps, params: { companyId: number } }) {
   const { show, edit, delete: deleteId, generateChecksModal, createVacationsModal, showVacations } = searchParams;
@@ -81,13 +93,15 @@ export default async function EmployeesPage({ searchParams, params }: { searchPa
         <Link className='bg-blue-500 hover:bg-blue-600 text-white m-5 p-2 rounded' href="/companies">Volver a empresas</Link>
         <MainTitle>Empleados de {company.name}</MainTitle>
 
-        <div className="grid auto-rows-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 rows justify-evenly gap-4 max-h-[60vh] max-w-[60vw] w-full overflow-y-scroll mt-auto flex-grow">
+        <div className="grid auto-rows-auto grid-cols-1 justify-evenly gap-4 max-h-[60vh] max-w-[60vw] w-full overflow-y-scroll mt-auto flex-grow">
           {employees.map((employee) => (
-            <div key={company.name}>
-              <div className="bg-white p-4 rounded shadow">
-                <h2 className='text-black font-bold'>{employee.name}</h2>
-                <p>DNI: {employee.dni}</p>
-                <p>NSS: {employee.nss}</p>
+            <div key={employee.id}>
+              <div className="flex flex-row gap-5 bg-white p-4 rounded shadow">
+                <div>
+                  <h2 className='text-black font-bold'>{employee.name}</h2>
+                  <p>DNI: {employee.dni}</p>
+                  <p>NSS: {employee.nss}</p>
+                </div>
                 <div className="flex flex-wrap mt-4 gap-2">
                   <Link className="bg-green-500 hover:bg-green-600 text-white p-2 rounded" href={`${baseURL}?edit=${employee.id}`} >EDITAR HORARIO</Link>
                   <Link className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded" href={`${baseURL}?createVacationsModal=${employee.id}`} >AGREGAR VACACIONES</Link>
@@ -121,7 +135,7 @@ export default async function EmployeesPage({ searchParams, params }: { searchPa
         {createVacationsModal && employees.find((emp) => emp.id === parseInt(createVacationsModal)) && (
           <VacationsModal title="Crear vacaciones" baseURL={baseURL} employee={employees.find((emp) => emp.id === parseInt(createVacationsModal))!} handleSubmitVacations={handleSubmitVacations} />
         )}
-        {showVacations && <ShowVacationsModal title="Vacaciones" baseURL={baseURL} vacations={employees.find((emp) => emp.id === parseInt(showVacations))?.vacations!}/>}
+        {showVacations && <ShowVacationsModal title="Vacaciones" baseURL={baseURL} vacations={employees.find((emp) => emp.id === parseInt(showVacations))?.vacations!} deleteVacations={handleDeleteVacation} />}
       </section>
     );
   } catch (error) {

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Modal } from "./modal";
 import { Employee, Vacation } from "../lib/definitions";
+import { DeleteButton } from "./buttons";
 
 function VacationsDateField({ text, onChange }: { text: string, onChange: (e: any) => void }) {
     return (
@@ -45,7 +46,7 @@ export function VacationsModal({ title, baseURL, employee, handleSubmitVacations
     )}</div>);
 }
 
-export function ShowVacationsModal({ title, baseURL, vacations, cancelText }: { title: string, baseURL: string, vacations: Vacation[], cancelText?: string }) {
+export function ShowVacationsModal({ title, baseURL, vacations, cancelText, deleteVacations }: { title: string, baseURL: string, vacations: Vacation[], cancelText?: string, deleteVacations: (vacation: Vacation) => void }) {
     const [showModal, setShowModal] = useState(true);
 
     if (vacations.length === 0) {
@@ -82,6 +83,9 @@ export function ShowVacationsModal({ title, baseURL, vacations, cancelText }: { 
                     <div key={vacation.id} className="flex gap-2">
                         <p>Inicio: {vacation.start_date.toISOString().split("T")[0]}</p>
                         <p>Fin: {vacation.end_date.toISOString().split("T")[0]}</p>
+                        <DeleteButton onClick={() => {
+                            console.log("Eliminando vacaciones",vacation);
+                            deleteVacations(vacation)}}>Eliminar</DeleteButton>
                     </div>
                 ))}
             </div>
