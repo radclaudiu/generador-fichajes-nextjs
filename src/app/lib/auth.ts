@@ -72,8 +72,8 @@ export async function verifyUser(formData: FormData) {
     console.log('formData', formData);
     const username = formData.get('username');
     const password = formData.get('password');
-    if (username === 'admin' && password === 'admin') {
-        return { username: 'admin' };
+    if (username === process.env.MAIN_USER && password === process.env.MAIN_PASSWORD) {
+        return { username: process.env.MAIN_USER };
     }
     return null;
 }
