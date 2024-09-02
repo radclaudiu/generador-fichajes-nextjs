@@ -93,6 +93,9 @@ async function seedEmployees() {
 
 export async function GET() {
   try {
+    if (process.env.LOAD_PLACEHOLDER_DATA == 'false') {
+      return Response.json({ message: 'Placeholder data not loaded' });
+    }
     // remove all data from the tables
     await client.sql`DROP TABLE IF EXISTS vacations`;
     await client.sql`DROP TABLE IF EXISTS checks`;
