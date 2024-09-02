@@ -80,19 +80,14 @@ export function generatePDF(company: Company, employee: Employee, start: Date, e
         check.end_time.setHours(parseInt(end_time1.slice(0, 2)), parseInt(end_time1.slice(3, 5)), parseInt(end_time1.slice(6, 8)));
 
         if (check.date >= start && check.date <= end) {
-            // Almacenar el recuento de horas del día en el formato HH:MM:SS
-            let workedTime = "";
-            let hours = Math.floor((check.end_time.getTime() - check.start_time.getTime()) / 3600000);
-            let minutes = Math.floor(((check.end_time.getTime() - check.start_time.getTime()) % 3600000) / 60000);
-            let seconds = Math.floor(((check.end_time.getTime() - check.start_time.getTime()) % 60000) / 1000);
-            workedTime += hours < 10 ? "0" + hours : hours;
-            workedTime += ":";
-            workedTime += minutes < 10 ? "0" + minutes : minutes;
-            workedTime += ":";
-            workedTime += seconds < 10 ? "0" + seconds : seconds;
 
+            let day = String(check.date.getDate()).padStart(2, '0');
+            let month = String(check.date.getMonth() + 1).padStart(2, '0'); // Los meses comienzan en 0
+            let year = check.date.getFullYear();
+            
+            let formattedDate = `${day}-${month}-${year}`;
 
-            tableData.push([check.date.toISOString().split('T')[0], check.start_time.toTimeString().slice(0, 8), check.end_time.toTimeString().slice(0, 8), workedTime]);
+            tableData.push([formattedDate, check.start_time.toTimeString().slice(0, 8), check.end_time.toTimeString().slice(0, 8)]);
         }
     });
 
@@ -100,23 +95,27 @@ export function generatePDF(company: Company, employee: Employee, start: Date, e
 
     // Añadir la tabla al PDF
     autoTable(doc, {
-        head: [['Fecha', 'Entrada', 'Salida', 'Horas']],
+        head: [['Fecha', 'Entrada', 'Salida']],
         body: tableData,
-        startY: 75
+        startY: 75,
+        styles: { halign: 'center' }
     });
-
-
-    // Cálculo del total de horas
-
-    const totalHours = employee.checks.reduce((total, check) => {
-        return total + (check.end_time.getTime() - check.start_time.getTime()) / 3600000;
-    }, 0);
 
     const finalY = (doc as any).lastAutoTable.finalY || 75;
 
     // Firma del empleado
-    doc.text(`Estos fichajes han sido comprobados por el empleado.\n Firma : `, 15, finalY + 20);
+    doc.text(`Estos fichajes han sido comprobados por el empleado.\n\n\n Firma : `, 15, finalY + 10);
 
+    let dayStart = String(start.getDate()).padStart(2, '0');
+    let monthStart = String(start.getMonth() + 1).padStart(2, '0'); // Los meses comienzan en 0
+    let yearStart = start.getFullYear();
+    
+    let formattedDateStart = `${dayStart}-${monthStart}-${yearStart}`;
+    let dayEnd = String(start.getDate()).padStart(2, '0');
+    let monthEnd = String(start.getMonth() + 1).padStart(2, '0'); // Los meses comienzan en 0
+    let yearEnd = start.getFullYear();
+    
+    let formattedDateEnd = `${dayEnd}-${monthEnd}-${yearEnd}`;
 
-    doc.save(`fichajes_${employee.name}_${start.toISOString().split('T')[0]}_${end.toISOString().split('T')[0]}.pdf`);
+    doc.save(`fichajes_${formattedDateStart}_${formattedDateEnd}.pdf`);
 }
