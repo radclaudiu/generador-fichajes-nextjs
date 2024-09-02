@@ -97,15 +97,15 @@ export async function GET() {
       return Response.json({ message: 'Placeholder data not loaded' });
     }
     // remove all data from the tables
-    await client.sql`DROP TABLE IF EXISTS vacations`;
-    await client.sql`DROP TABLE IF EXISTS checks`;
-    await client.sql`DROP TABLE IF EXISTS employees`;
-    await client.sql`DROP TABLE IF EXISTS companies`;
+    // await client.sql`DROP TABLE IF EXISTS vacations`;
+    // await client.sql`DROP TABLE IF EXISTS checks`;
+    // await client.sql`DROP TABLE IF EXISTS employees`;
+    // await client.sql`DROP TABLE IF EXISTS companies`;
 
-    await client.sql`BEGIN`;
-    await seedCompanies();
-    await seedEmployees();
-    await client.sql`COMMIT`;
+    // await client.sql`BEGIN`;
+    // await seedCompanies();
+    // await seedEmployees();
+    // await client.sql`COMMIT`;
 
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {
