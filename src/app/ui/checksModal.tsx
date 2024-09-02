@@ -18,7 +18,8 @@ const generateChecksHandler = async (company: Company, employee: Employee, start
         if (response.ok) {
             let updatedEmployee = await response.json();
             console.log("Checks generated successfully");
-            generatePDF(company, updatedEmployee, start, end);
+            await generatePDF(company, updatedEmployee, start, end);
+            alert("Fichajes generados correctamente");
         } else {
             console.error("Failed to generate checks");
         }
