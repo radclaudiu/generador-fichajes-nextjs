@@ -5,70 +5,46 @@ import { createChecks } from "./data/employees";
 
 export async function generateChecks(employee: Employee, start: Date, end: Date): Promise<Check[]> {
     const checks: Check[] = [];
+    const schedules = [
+        { start: employee.sunday_in, end: employee.sunday_out },   // Domingo
+        { start: employee.monday_in, end: employee.monday_out },   // Lunes
+        { start: employee.tuesday_in, end: employee.tuesday_out }, // Martes
+        { start: employee.wednesday_in, end: employee.wednesday_out }, // Miércoles
+        { start: employee.thursday_in, end: employee.thursday_out }, // Jueves
+        { start: employee.friday_in, end: employee.friday_out },   // Viernes
+        { start: employee.saturday_in, end: employee.saturday_out }  // Sábado
+    ];
+
+    const employeeChecksSet = new Set(employee.checks.map(c => c.date.toISOString().split('T')[0]));
+    const vacationPeriods = employee.vacations?.map(v => ({
+        start: new Date(v.start_date),
+        end: new Date(v.end_date)
+    })) || [];
+
     for (let date = new Date(start); date < end; date.setDate(date.getDate() + 1)) {
-        let schedule;
-        console.log("- ",date.toISOString().split('T')[0], " - ", date.getDay());
-        switch (date.getDay()) {
-            case 0:
-                schedule = { start: employee.sunday_in, end: employee.sunday_out };
-                break;
-            case 1:
-                schedule = { start: employee.monday_in, end: employee.monday_out };
-                break;
-            case 2:
-                schedule = { start: employee.tuesday_in, end: employee.tuesday_out };
-                break;
-            case 3:
-                schedule = { start: employee.wednesday_in, end: employee.wednesday_out };
-                break;
-            case 4:
-                schedule = { start: employee.thursday_in, end: employee.thursday_out };
-                break;
-            case 5:
-                schedule = { start: employee.friday_in, end: employee.friday_out };
-                break;
-            case 6:
-                schedule = { start: employee.saturday_in, end: employee.saturday_out };
-                break;
-        }
+        const daySchedule = schedules[date.getDay()];
+        const dateString = date.toISOString().split('T')[0];
 
-        console.log("schedule: ", schedule);
-
-        if (!schedule || schedule.start == null || schedule.end == null) {
-            continue;
-        }
-
-        console.log("schedule: ", schedule);
-
-        const isVacation = employee.vacations && employee.vacations.some(v => {
-            const vacationStart = new Date(v.start_date);
-            const vacationEnd = new Date(v.end_date);
-            return date >= vacationStart && date <= vacationEnd;
-        });
-
-        if (isVacation) {
-            continue;
-        }
-
-        if (employee.checks.some(c => c.date.toISOString().split('T')[0] == date.toISOString().split('T')[0])) {
-            continue;
-        }
+        if (!daySchedule?.start || !daySchedule?.end) continue;
+        if (vacationPeriods.some(v => date >= v.start && date <= v.end)) continue;
+        if (employeeChecksSet.has(dateString)) continue;
 
         const randomStart = new Date(date);
-        const [startHour, startMinute] = schedule.start.split(':');
+        const [startHour, startMinute] = daySchedule.start.split(':');
         randomStart.setHours(parseInt(startHour), parseInt(startMinute) - Math.floor(Math.random() * 5) - 1, Math.random() * 60);
 
         const randomEnd = new Date(date);
-        const [endHour, endMinute] = schedule.end.split(':');
+        const [endHour, endMinute] = daySchedule.end.split(':');
         randomEnd.setHours(parseInt(endHour), parseInt(endMinute) + Math.floor(Math.random() * 4) + 1, Math.random() * 60);
 
         checks.push({
-            date: new Date(date.toISOString().split('T')[0]),
+            date: new Date(dateString),
             start_time: randomStart,
             end_time: randomEnd,
             employeeId: employee.id
         });
     }
+
     await createChecks(checks);
     return checks;
 }
@@ -78,7 +54,7 @@ export function generatePDF(company: Company, employee: Employee, start: Date, e
 
     // Título
     doc.setFontSize(18);
-    doc.text('Registro de fichajes', 135, 15, { align: 'center' });
+    doc.text('Registro de fichajes', 115, 15, { align: 'center' });
 
     // Datos de la empresa
     doc.setFontSize(12);
