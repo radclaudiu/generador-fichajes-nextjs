@@ -53,9 +53,9 @@ export function EditButton({ children } : {children: string}) {
     );
 };
 
-export function DeleteButton({ children } : {children: string}) {
+export function DeleteButton({ children, onClick } : {children: string, onClick?: () => void}) {
     return (
-        <button className='bg-red-500 hover:bg-red-600 text-white p-2 rounded'>
+        <button className='bg-red-500 hover:bg-red-600 text-white p-2 rounded' onClick={onClick}>
             {children}
         </button>
     );
