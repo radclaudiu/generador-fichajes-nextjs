@@ -49,7 +49,7 @@ const handleDeleteEmployee = async (employee: Employee) => {
   "use server";
   try {
     console.log("Deleting employee", employee);
-    await deleteEmployee(employee.id);
+    await deleteEmployee(employee);
   } catch (error) {
     console.error("Error deleting employee", error);
   }

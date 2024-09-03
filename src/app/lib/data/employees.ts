@@ -61,10 +61,9 @@ export async function updateEmployee(employeeId: number, employee: Employee): Pr
     }
 }
 
-export async function deleteEmployee(employeeId: number): Promise<void> {
+export async function deleteEmployee(employee: Employee): Promise<void> {
     try {
-        const employee = await fetchEmployee(employeeId);
-        await sql`DELETE FROM employees WHERE id = ${employeeId}`;
+        await sql`DELETE FROM employees WHERE id = ${employee.id}`;
         revalidatePath(`/companies/${employee.companyId}/employees`);        
     } catch (error) {
         console.log('Database Error Deleting Employee:', error);
