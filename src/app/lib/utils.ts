@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Company, Employee, Check } from "@/app/lib/definitions";
-import { createChecks } from "./data/employees";
+import { createChecks, deleteChecks } from "./data/employees";
 
 export async function generateChecks(employee: Employee, start: Date, end: Date): Promise<Check[]> {
     const checks: Check[] = [];
@@ -27,7 +27,10 @@ export async function generateChecks(employee: Employee, start: Date, end: Date)
 
         if (!daySchedule?.start || !daySchedule?.end) continue;
         if (vacationPeriods.some(v => date >= v.start && date <= v.end)) continue;
-        if (employeeChecksSet.has(dateString)) continue;
+        if (employeeChecksSet.has(dateString)) {
+            // Eliminar el fichaje si ya existe
+            await deleteChecks(employee.checks.filter(c => c.date.toISOString().split('T')[0] === dateString));
+        };
 
         const randomStart = new Date(date);
         const [startHour, startMinute] = daySchedule.start.split(':');
@@ -38,6 +41,7 @@ export async function generateChecks(employee: Employee, start: Date, end: Date)
         randomEnd.setHours(parseInt(endHour), parseInt(endMinute) + Math.floor(Math.random() * 4) + 1, Math.random() * 60);
 
         checks.push({
+            id: 0,
             date: new Date(dateString),
             start_time: randomStart,
             end_time: randomEnd,

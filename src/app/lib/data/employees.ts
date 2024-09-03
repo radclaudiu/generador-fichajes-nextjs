@@ -70,16 +70,29 @@ export async function deleteEmployee(employeeId: number): Promise<void> {
 
 export async function createChecks(checks: Check[]): Promise<void> {
     try {
+        const employee = await fetchEmployee(checks[0].employeeId);
+        for (const check of checks) {
+            // insert check into database adding 1 day to the date to avoid timezone issues
+            await sql`INSERT INTO checks (date, start_time, end_time, employee_id) VALUES (${new Date(check.date.getTime()).toISOString()}, ${check.start_time.toISOString().split('T')[1]}, ${check.end_time.toISOString().split('T')[1]}, ${check.employeeId
+            })`;       
+        }
+        revalidatePath(`/companies/${employee.companyId}/employees`); 
+    } catch (error) {
+        console.log('Database Error:', error);
+        throw new Error('Failed to create checks.');
+    }
+}
+
+export async function deleteChecks(checks: Check[]): Promise<void> {
+    try {
         for (const check of checks) {
             const employee = await fetchEmployee(check.employeeId);
-            // insert check into database adding 1 day to the date to avoid timezone issues
-            await sql`INSERT INTO checks (date, start_time, end_time, employee_id) VALUES (${new Date(check.date.getTime() + 86400000).toISOString()}, ${check.start_time.toISOString().split('T')[1]}, ${check.end_time.toISOString().split('T')[1]}, ${check.employeeId
-            })`;
+            await sql`DELETE FROM checks WHERE id = ${check.id}`;
             revalidatePath(`/companies/${employee.companyId}/employees`);        
         }
     } catch (error) {
         console.log('Database Error:', error);
-        throw new Error('Failed to create checks.');
+        throw new Error('Failed to delete checks.');
     }
 }
 
@@ -105,3 +118,4 @@ export async function deleteVacation(vacation: Vacation): Promise<void> {
         throw new Error('Failed to delete vacation.');
     }
 }
+

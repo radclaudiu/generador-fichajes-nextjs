@@ -39,6 +39,7 @@ export type Company = {
 }
 
 export type Check = {
+    id: number;
     date: Date;
     start_time: Date;
     end_time: Date;
