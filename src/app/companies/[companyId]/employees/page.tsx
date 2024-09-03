@@ -88,6 +88,14 @@ export default async function EmployeesPage({ searchParams, params }: { searchPa
     const employees: Employee[] = await fetchCompanyEmployees(company.id);
     const baseURL = `/companies/${params.companyId}/employees`;
 
+    let selectedEmployeeVacations: Vacation[] = [];
+
+    if (showVacations) {
+      selectedEmployeeVacations = (await fetchEmployee(parseInt(showVacations))).vacations;
+      console.log("Vacaciones del empleado: ", selectedEmployeeVacations);
+    }
+
+
     return (
       <section className="flex flex-col items-center justify-center h-screen flex-grow mx-7">
         <Link className='bg-blue-500 hover:bg-blue-600 text-white m-5 p-2 rounded' href="/companies">Volver a empresas</Link>
@@ -135,7 +143,7 @@ export default async function EmployeesPage({ searchParams, params }: { searchPa
         {createVacationsModal && employees.find((emp) => emp.id === parseInt(createVacationsModal)) && (
           <VacationsModal title="Crear vacaciones" baseURL={baseURL} employee={employees.find((emp) => emp.id === parseInt(createVacationsModal))!} handleSubmitVacations={handleSubmitVacations} />
         )}
-        {showVacations && <ShowVacationsModal title="Vacaciones" baseURL={baseURL} vacations={employees.find((emp) => emp.id === parseInt(showVacations))?.vacations!} deleteVacations={handleDeleteVacation} />}
+        {showVacations && <ShowVacationsModal title="Vacaciones" baseURL={baseURL} employee={employees.find((emp) => emp.id === parseInt(showVacations))!} deleteVacations={handleDeleteVacation} />}
       </section>
     );
   } catch (error) {

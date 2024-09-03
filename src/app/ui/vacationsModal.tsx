@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "./modal";
 import { Employee, Vacation } from "../lib/definitions";
 import { DeleteButton } from "./buttons";
@@ -46,8 +46,26 @@ export function VacationsModal({ title, baseURL, employee, handleSubmitVacations
     )}</div>);
 }
 
-export function ShowVacationsModal({ title, baseURL, vacations, cancelText, deleteVacations }: { title: string, baseURL: string, vacations: Vacation[], cancelText?: string, deleteVacations: (vacation: Vacation) => void }) {
+export function ShowVacationsModal({ title, baseURL, employee, cancelText, deleteVacations }: { title: string, baseURL: string, employee: Employee, cancelText?: string, deleteVacations: (vacation: Vacation) => void }) {
     const [showModal, setShowModal] = useState(true);
+    const [vacations, setVacations] = useState<Vacation[]>([]);
+    useEffect(() => {
+        // Fetch vacations
+        fetch(`/api/v0/employees/${employee.id}/vacations`) // Fetch vacations from employee
+            .then((response) => response.json())
+            .then((data) => {
+                data = data.map((v: any) => ({
+                    id: v.id,
+                    start_date: new Date(v.start_date),
+                    end_date: new Date(v.end_date),
+                    employee_id: v.employee_id
+                }));
+                setVacations(data);
+            });
+    }, []);
+    
+    console.log("Vacaciones del empleado: ", vacations);
+    
 
     if (vacations.length === 0) {
         return (<div>{showModal && (
