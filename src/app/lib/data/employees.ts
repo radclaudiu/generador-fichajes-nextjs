@@ -101,8 +101,8 @@ export async function deleteChecks(checks: Check[]): Promise<void> {
 
 export async function createVacation(vacation: Vacation): Promise<Vacation> {
     try {
-        const employee = await fetchEmployee(vacation.employee_id);
         const data = await sql<Vacation>`INSERT INTO vacations (start_date, end_date, employee_id) VALUES (${vacation.start_date.toISOString().split("T")[0]}, ${vacation.end_date.toISOString().split("T")[0]}, ${vacation.employee_id}) RETURNING *`;
+        const employee = await fetchEmployee(vacation.employee_id);
         console.log("Employee with vacations: ", employee);
         
         revalidatePath(`/companies/${employee.companyId}/employees`);        
