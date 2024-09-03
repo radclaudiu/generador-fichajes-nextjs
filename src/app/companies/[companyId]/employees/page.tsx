@@ -71,7 +71,7 @@ const handleDeleteVacation = async (vacation: Vacation) => {
   
   try {
     console.log("Deleting vacation", vacation);
-    await deleteVacation(vacation.id);
+    await deleteVacation(vacation);
   } catch (error) {
     console.error("Error deleting vacation", error);
   }
