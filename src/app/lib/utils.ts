@@ -77,6 +77,10 @@ export function generatePDF(company: Company, employee: Employee, start: Date, e
 
     console.log("Fichajes: ", employee.checks);
     
+    // Convert the date from checks from string type to Date type
+    employee.checks.map(check => {check.date = new Date(check.date)});
+    employee.checks.sort((a, b) => a.date.getTime() - b.date.getTime());
+
     employee.checks.forEach(check => {
         check.date = new Date(check.date);
         let start_time1 = check.start_time.toString();
