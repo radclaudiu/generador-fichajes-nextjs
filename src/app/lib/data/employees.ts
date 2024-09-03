@@ -8,7 +8,7 @@ export async function createEmployee(employee: Employee): Promise<Employee> {
         revalidatePath(`/companies/${employee.companyId}/employees`);        
         return data.rows[0];
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Creating Employee:', error);
         throw new Error('Failed to create employee.');
     }
 }
@@ -16,11 +16,13 @@ export async function createEmployee(employee: Employee): Promise<Employee> {
 export async function fetchEmployee(employeeId: number): Promise<Employee> {
     try {
         const data = await sql<Employee>`SELECT * FROM employees WHERE id = ${employeeId}`;
+        console.log("Fetched data from employee number ",employeeId,": ", data);
+        
         data.rows[0].vacations = await fetchEmployeeVacations(employeeId);
         data.rows[0].checks = await fetchEmployeeChecks(employeeId);
         return data.rows[0];
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Fetching Employees:', error);
         throw new Error('Failed to fetch employee.');
     }
 }
@@ -28,9 +30,11 @@ export async function fetchEmployee(employeeId: number): Promise<Employee> {
 export async function fetchEmployeeVacations(employeeId: number): Promise<Vacation[]> {
     try {
         const data = await sql<Vacation>`SELECT * FROM vacations WHERE employee_id = ${employeeId}`;
+        console.log("Fetched vacations from employee number ",employeeId,": ", data.rows);
+        
         return data.rows;
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Fetching Vacations:', error);
         throw new Error('Failed to fetch employee vacations.');
     }
 }
@@ -40,7 +44,7 @@ export async function fetchEmployeeChecks(employeeId: number): Promise<Check[]> 
         const data = await sql<Check>`SELECT * FROM checks WHERE employee_id = ${employeeId}`;
         return data.rows;
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Fetching Checks:', error);
         throw new Error('Failed to fetch employee checks.');
     }
 }
@@ -52,7 +56,7 @@ export async function updateEmployee(employeeId: number, employee: Employee): Pr
         revalidatePath(`/companies/${employee.companyId}/employees`);
         return data.rows[0];
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Updating Employee:', error);
         throw new Error('Failed to update employee.');
     }
 }
@@ -63,7 +67,7 @@ export async function deleteEmployee(employeeId: number): Promise<void> {
         await sql`DELETE FROM employees WHERE id = ${employeeId}`;
         revalidatePath(`/companies/${employee.companyId}/employees`);        
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Deleting Employee:', error);
         throw new Error('Failed to delete employee.');
     }
 }
@@ -77,7 +81,7 @@ export async function createChecks(checks: Check[]): Promise<void> {
             revalidatePath(`/api/v0/employees/${check.employeeId}/generateChecks`);
         }
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Creating Check:', error);
         throw new Error('Failed to create checks.');
     }
 }
@@ -91,7 +95,7 @@ export async function deleteChecks(checks: Check[]): Promise<void> {
         }
         revalidatePath(`/companies/${employee.companyId}/employees`);        
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Deleting Check:', error);
         throw new Error('Failed to delete checks.');
     }
 }
@@ -100,10 +104,12 @@ export async function createVacation(vacation: Vacation): Promise<Vacation> {
     try {
         const employee = await fetchEmployee(vacation.employee_id);
         const data = await sql<Vacation>`INSERT INTO vacations (start_date, end_date, employee_id) VALUES (${vacation.start_date.toISOString().split("T")[0]}, ${vacation.end_date.toISOString().split("T")[0]}, ${vacation.employee_id}) RETURNING *`;
+        console.log("Employee with vacations: ", employee);
+        
         revalidatePath(`/companies/${employee.companyId}/employees`);        
         return data.rows[0];
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Creating Vacation:', error);
         throw new Error('Failed to create vacation.');
     }
 }
@@ -114,7 +120,7 @@ export async function deleteVacation(vacation: Vacation): Promise<void> {
         await sql`DELETE FROM vacations WHERE id = ${vacation.id}`;
         revalidatePath(`/companies/${vacation.employee_id}/employees`);        
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Deleting Vacation:', error);
         throw new Error('Failed to delete vacation.');
     }
 }

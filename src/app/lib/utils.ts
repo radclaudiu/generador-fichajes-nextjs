@@ -74,6 +74,9 @@ export function generatePDF(company: Company, employee: Employee, start: Date, e
 
     // Tabla de fichajes con aquellos fichajes dentro del rango de fechas
     let tableData: string[][] = [];
+
+    console.log("Fichajes: ", employee.checks);
+    
     employee.checks.forEach(check => {
         check.date = new Date(check.date);
         let start_time1 = check.start_time.toString();

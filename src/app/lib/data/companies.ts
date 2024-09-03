@@ -8,7 +8,7 @@ export async function fetchCompanies(): Promise<Company[]> {
         const data = await sql<Company>`SELECT * FROM companies`;
         return data.rows;
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Fetching Companies:', error);
         console.log(error);
         throw new Error('Failed to fetch companies data.');
     }
@@ -22,7 +22,7 @@ export async function fetchCompanyEmployees(companyId: number): Promise<Employee
         }
         return data.rows;
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Fetching Employees:', error);
         console.log(error);
         throw new Error('Failed to fetch employees data.');
     }
@@ -35,7 +35,7 @@ export async function fetchCompany(companyId: number): Promise<Company | null> {
         }
         return data.rows[0];
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Fetching Company:', error);
         console.log(error);
         throw new Error('Failed to fetch company data.');
     }
@@ -47,7 +47,7 @@ export async function createCompany(company: Company): Promise<Company> {
         revalidatePath('/companies');
         return data.rows[0];
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Creating Company:', error);
         throw new Error('Failed to create company.');
     }
 }
@@ -59,7 +59,7 @@ export async function updateCompany(companyId: number, company: Company): Promis
         revalidatePath('/companies');
         return data.rows[0];
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Updating Company:', error);
         throw new Error('Failed to update company.');
     }
 }
@@ -69,7 +69,7 @@ export async function deleteCompany(companyId: number): Promise<void> {
         await sql`DELETE FROM companies WHERE id = ${companyId}`;
         revalidatePath('/companies');
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Database Error Deleting Company:', error);
         console.log(error);
         throw new Error('Failed to delete company.');
     }

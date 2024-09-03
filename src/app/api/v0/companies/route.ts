@@ -11,7 +11,7 @@ export async function GET(): Promise<NextResponse> {
     const companies = await fetchCompanies();
     return NextResponse.json(companies);
   } catch (error) {
-    console.log('Database Error:', error);
+    console.log('Endpoint error get companies:', error);
     return NextResponse.json({ error: 'Failed to fetch companies.' }, { status: 500 });
   }
 }
@@ -22,7 +22,7 @@ export async function POST(req: Request): Promise<NextResponse> {
     const company = await createCompany(data);
     return NextResponse.json(company);
   } catch (error) {
-    console.log('Database Error:', error);
+    console.log('Endpoint error creating company:', error);
     return NextResponse.json({ error: 'Failed to create company.' }, { status: 500 });
   }
 }

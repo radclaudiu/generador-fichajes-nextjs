@@ -10,7 +10,7 @@ export async function GET(request: Request, context: any): Promise<NextResponse>
     }
     return NextResponse.json(company);
   } catch (error) {
-    console.log('Database Error:', error);
+    console.log('Endpoint error getting company:', error);
     return NextResponse.json({ error: 'Failed to fetch company.' }, { status: 500 });
   }
 }
@@ -22,7 +22,7 @@ export async function PUT(request: Request, context: any): Promise<NextResponse>
     const company = await updateCompany(companyId, companyData);
     return NextResponse.json(company);
   } catch (error) {
-    console.log('Database Error:', error);
+    console.log('Endpoint error updating company:', error);
     return NextResponse.json({ error: 'Failed to fetch company.' }, { status: 500 });
   }
 }
@@ -33,7 +33,7 @@ export async function DELETE(request: Request, context: any): Promise<NextRespon
     await deleteCompany(companyId);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.log('Database Error:', error);
+    console.log('Endpoint error deleting company:', error);
     return NextResponse.json({ error: 'Failed to delete company.' }, { status: 500 });
   }
 }

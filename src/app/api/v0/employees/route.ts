@@ -7,7 +7,7 @@ export async function POST(req: Request): Promise<NextResponse> {
         const employee = await createEmployee(data);
         return NextResponse.json(employee);
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Endpoint error creating a employee:', error);
         return NextResponse.json({ error: 'Failed to create employee.' }, { status: 500 });
     }
 }

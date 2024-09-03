@@ -7,7 +7,7 @@ export async function GET(request: Request, context: any): Promise<NextResponse>
         const employees = await fetchCompanyEmployees(companyId);        
         return NextResponse.json(employees);
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Endpoint Error getting employees from a company:', error);
         return NextResponse.json({ error: 'Failed to fetch employees.' }, { status: 500 });
     }
 }

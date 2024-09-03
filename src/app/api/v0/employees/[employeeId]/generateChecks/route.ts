@@ -15,7 +15,9 @@ export async function POST(request: Request, context: any): Promise<NextResponse
         
         await generateChecks(employee, new Date(start), new Date(end));
         const updatedEmployee = await fetchEmployee(employeeId);
-        return NextResponse.json( updatedEmployee );
+        console.log('Checks generated successfully returning employee: ', updatedEmployee);
+        
+        return NextResponse.json( updatedEmployee);
     } catch (error) {
         console.log('Error generating checks:', error);
         return NextResponse.json({ error: 'Failed to generate checks.' }, { status: 500 });

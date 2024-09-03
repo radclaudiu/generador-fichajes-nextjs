@@ -9,7 +9,7 @@ export async function PUT(request: Request, context: any): Promise<NextResponse>
         const employee = await updateEmployee(employeeId, employeeData);
         return NextResponse.json(employee);
     } catch (error) {
-        console.log('Database Error:', error);
+        console.log('Endpoint error updating a employee:', error);
         return NextResponse.json({ error: 'Failed to create employee.' }, { status: 500 });
     }
 }
