@@ -95,11 +95,11 @@ export async function createVacation(vacation: Vacation): Promise<Vacation> {
     }
 }
 
-export async function deleteVacation(vacationId: number): Promise<void> {
+export async function deleteVacation(vacation: Vacation): Promise<void> {
     try {
-        const vacation = await sql<Vacation>`SELECT * FROM vacations WHERE id = ${vacationId}`;
-        await sql`DELETE FROM vacations WHERE id = ${vacationId}`;
-        revalidatePath(`/companies/${vacation.rows[0].employee_id}/employees`);        
+        await sql<Vacation>`SELECT * FROM vacations WHERE id = ${vacation.id}`;
+        await sql`DELETE FROM vacations WHERE id = ${vacation.id}`;
+        revalidatePath(`/companies/${vacation.employee_id}/employees`);        
     } catch (error) {
         console.log('Database Error:', error);
         throw new Error('Failed to delete vacation.');
