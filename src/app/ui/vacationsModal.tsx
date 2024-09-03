@@ -48,7 +48,7 @@ export function VacationsModal({ title, baseURL, employee, handleSubmitVacations
 
 export function ShowVacationsModal({ title, baseURL, employee, cancelText, deleteVacations }: { title: string, baseURL: string, employee: Employee, cancelText?: string, deleteVacations: (vacation: Vacation) => void }) {
     const [showModal, setShowModal] = useState(true);
-    const [vacations, setVacations] = useState<Vacation[]>([]);
+    const [vacations, setVacations] = useState<Vacation[]>(employee.vacations);
     useEffect(() => {
         // Fetch vacations
         fetch(`/api/v0/employees/${employee.id}/vacations`) // Fetch vacations from employee
