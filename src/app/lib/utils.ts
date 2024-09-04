@@ -2,6 +2,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Company, Employee, Check } from "@/app/lib/definitions";
 import { createChecks, deleteChecks } from "./data/employees";
+import { format } from 'node:path/win32';
 
 export async function generateChecks(employee: Employee, start: Date, end: Date): Promise<Check[]> {
     const checks: Check[] = [];
@@ -113,18 +114,7 @@ export function generatePDF(company: Company, employee: Employee, start: Date, e
     // Firma del empleado
     doc.text(`Estos fichajes han sido comprobados por el empleado.\n\n\n Firma : `, 15, finalY + 10);
 
-    let dayStart = String(start.getDate()).padStart(2, '0');
-    let monthStart = String(start.getMonth() + 1).padStart(2, '0'); // Los meses comienzan en 0
-    let yearStart = start.getFullYear();
-    
-    let formattedDateStart = `${dayStart}-${monthStart}-${yearStart}`;
-    let dayEnd = String(start.getDate()).padStart(2, '0');
-    let monthEnd = String(start.getMonth() + 1).padStart(2, '0'); // Los meses comienzan en 0
-    let yearEnd = start.getFullYear();
-    
-    let formattedDateEnd = `${dayEnd}-${monthEnd}-${yearEnd}`;
-
-    doc.save(`fichajes_${formattedDateStart}_${formattedDateEnd}.pdf`);
+    doc.save(`fichajes_${formatDate(start)}_${formatDate(end)}.pdf`);
 }
 
 export function formatDate(date: Date): string {
