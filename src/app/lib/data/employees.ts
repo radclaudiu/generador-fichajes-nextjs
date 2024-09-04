@@ -1,6 +1,7 @@
 import { Check, Employee, Vacation } from "@/app/lib/definitions";
 import { sql } from "@vercel/postgres";
 import { revalidatePath } from "next/cache";
+import { fetchCompanyByEmployee } from "./companies";
 
 export async function createEmployee(employee: Employee): Promise<Employee> {
     try {
@@ -88,11 +89,9 @@ export async function createChecks(checks: Check[]): Promise<void> {
 export async function deleteChecks(checks: Check[]): Promise<void> {
     try {
         if (!checks.length) return;
-        const employee = await fetchEmployee(checks[0].employeeId);
         for (const check of checks) {
             await sql`DELETE FROM checks WHERE id = ${check.id}`;
         }
-        revalidatePath(`/companies/${employee.companyId}/employees`);        
     } catch (error) {
         console.log('Database Error Deleting Check:', error);
         throw new Error('Failed to delete checks.');
@@ -105,7 +104,9 @@ export async function createVacation(vacation: Vacation): Promise<Vacation> {
         const employee = await fetchEmployee(vacation.employee_id);
         console.log("Employee with vacations: ", employee);
         
-        revalidatePath(`/companies/${employee.companyId}/employees`);        
+        const companyFromEmployee = await fetchCompanyByEmployee(vacation.employee_id);
+        if (!companyFromEmployee) throw new Error('Failed to fetch company data after deleting vacations.');
+        revalidatePath(`/companies/${companyFromEmployee.id}/employees`);  
         return data.rows[0];
     } catch (error) {
         console.log('Database Error Creating Vacation:', error);
@@ -117,7 +118,10 @@ export async function deleteVacation(vacation: Vacation): Promise<void> {
     try {
         await sql<Vacation>`SELECT * FROM vacations WHERE id = ${vacation.id}`;
         await sql`DELETE FROM vacations WHERE id = ${vacation.id}`;
-        revalidatePath(`/companies/${vacation.employee_id}/employees`);        
+        console.log("Revalidating path for employee: ", `/companies/${vacation.employee_id}/employees`);
+        const companyFromEmployee = await fetchCompanyByEmployee(vacation.employee_id);
+        if (!companyFromEmployee) throw new Error('Failed to fetch company data after deleting vacations.');
+        revalidatePath(`/companies/${companyFromEmployee.id}/employees`);  
     } catch (error) {
         console.log('Database Error Deleting Vacation:', error);
         throw new Error('Failed to delete vacation.');
