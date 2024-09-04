@@ -92,11 +92,7 @@ export function generatePDF(company: Company, employee: Employee, start: Date, e
 
         if (check.date >= start && check.date <= end) {
 
-            let day = String(check.date.getDate()).padStart(2, '0');
-            let month = String(check.date.getMonth() + 1).padStart(2, '0'); // Los meses comienzan en 0
-            let year = check.date.getFullYear();
-            
-            let formattedDate = `${day}-${month}-${year}`;
+            let formattedDate = formatDate(check.date);
 
             tableData.push([formattedDate, check.start_time.toTimeString().slice(0, 8), check.end_time.toTimeString().slice(0, 8)]);
         }
@@ -129,4 +125,12 @@ export function generatePDF(company: Company, employee: Employee, start: Date, e
     let formattedDateEnd = `${dayEnd}-${monthEnd}-${yearEnd}`;
 
     doc.save(`fichajes_${formattedDateStart}_${formattedDateEnd}.pdf`);
+}
+
+export function formatDate(date: Date): string {
+    let day = String(date.getDate()).padStart(2, '0');
+    let month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses comienzan en 0
+    let year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
 }
