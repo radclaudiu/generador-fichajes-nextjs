@@ -39,7 +39,10 @@ export async function generateChecks(employee: Employee, start: Date, end: Date)
 
         const randomEnd = new Date(date);
         const [endHour, endMinute] = daySchedule.end.split(':');
-        randomEnd.setHours(parseInt(endHour), parseInt(endMinute) + Math.floor(Math.random() * 4) + 1, Math.random() * 60);
+        // Get random 1 or -1
+        const random = Math.random() < 0.5 ? -1 : 1;
+        // Cambiar la hora de salida para que sea aleatoria entre 5 minutos antes y 5 minutos después de la hora de salida
+        randomEnd.setHours(parseInt(endHour), parseInt(endMinute) + (Math.floor(Math.random() * 5) * (Math.random() < 0.5 ? -1 : 1)), Math.random() * 60);
 
         checks.push({
             id: 0,
