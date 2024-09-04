@@ -108,13 +108,13 @@ export default async function EmployeesPage({ searchParams, params }: { searchPa
         <div className="grid auto-rows-auto grid-cols-1 gap-4 max-h-[60vh] max-w-[60vw] w-full overflow-y-scroll mt-auto flex-grow">
           {employees.map((employee) => (
             <div key={employee.id} >
-              <div className="flex flex-col md:flex-row gap-5 bg-white p-4 rounded shadow md:max-h-28">
+              <div className="flex flex-col md:flex-row gap-5 bg-white p-4 rounded shadow md:max-h-80">
                 <div>
                   <h2 className='text-black font-bold'>{employee.name}</h2>
                   <p>DNI: {employee.dni}</p>
                   <p>NSS: {employee.nss}</p>
                 </div>
-                <div className="flex flex-wrap max-w-sm gap-2">
+                <div className="flex flex-col min-w-40 gap-2">
                   <Link className="text-xs size-fit bg-green-500 hover:bg-green-600 text-white p-1 rounded" href={`${baseURL}?edit=${employee.id}`} >EDITAR HORARIO</Link>
                   <Link className="text-xs size-fit bg-blue-600 hover:bg-blue-700 text-white p-1 rounded" href={`${baseURL}?createVacationsModal=${employee.id}`} >AGREGAR VACACIONES</Link>
                   <Link className="text-xs size-fit bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded" href={`${baseURL}?generateChecksModal=${employee.id}`} >GENERAR FICHAJES</Link>
