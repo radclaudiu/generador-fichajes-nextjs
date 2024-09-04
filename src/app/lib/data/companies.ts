@@ -27,6 +27,21 @@ export async function fetchCompanyEmployees(companyId: number): Promise<Employee
         throw new Error('Failed to fetch employees data.');
     }
 }
+
+export async function fetchCompanyByEmployee(employeeId: number): Promise<Company | null> {
+    try {
+        const data = await sql<Company>`SELECT * FROM companies WHERE id = (SELECT company_id FROM employees WHERE id = ${employeeId})`;
+        if (data.rowCount === 0) {
+            return null;
+        }
+        return data.rows[0];
+    } catch (error) {
+        console.log('Database Error Fetching Company by Employee:', error);
+        console.log(error);
+        throw new Error('Failed to fetch company data.');
+    }
+}
+
 export async function fetchCompany(companyId: number): Promise<Company | null> {
     try {
         const data = await sql<Company>`SELECT * FROM companies WHERE id = ${companyId}`;

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Modal } from "./modal";
 import { Employee, Vacation } from "../lib/definitions";
 import { DeleteButton } from "./buttons";
+import { formatDate } from "../lib/utils";
 
 function VacationsDateField({ text, onChange }: { text: string, onChange: (e: any) => void }) {
     return (
@@ -46,67 +47,21 @@ export function VacationsModal({ title, baseURL, employee, handleSubmitVacations
     )}</div>);
 }
 
-export function ShowVacationsModal({ title, baseURL, employee, cancelText, deleteVacations }: { title: string, baseURL: string, employee: Employee, cancelText?: string, deleteVacations: (vacation: Vacation) => void }) {
+export function DeleteVacationModal({ title, baseURL, vacation, deleteVacation }: { title: string, baseURL: string, vacation: Vacation, deleteVacation: (vacation: Vacation) => void }) {
     const [showModal, setShowModal] = useState(true);
-    const [vacations, setVacations] = useState<Vacation[]>(employee.vacations);
-    useEffect(() => {
-        // Fetch vacations
-        fetch(`/api/v0/employees/${employee.id}/vacations`) // Fetch vacations from employee
-            .then((response) => response.json())
-            .then((data) => {
-                data = data.map((v: any) => ({
-                    id: v.id,
-                    start_date: new Date(v.start_date),
-                    end_date: new Date(v.end_date),
-                    employee_id: v.employee_id
-                }));
-                setVacations(data);
-            });
-    }, []);
-    
-    console.log("Vacaciones del empleado: ", vacations);
-    
-
-    if (vacations.length === 0) {
-        return (<div>{showModal && (
-            <Modal
-                title={title}
-                onClose={() => setShowModal(false)}
-                cancelText={cancelText ?? "Cerrar"}
-                submitText=""
-                baseURL={baseURL}
-                submitable={false}
-                onSubmit={() => { }}
-            >
-                <div className="flex flex-col gap-2">
-                    No se han encontrado vacaciones.
-                </div>
-            </Modal>
-        )}</div>)
-        ;
-    }    
-
-    return (<div>{showModal && (
+    return (
         <Modal
             title={title}
             onClose={() => setShowModal(false)}
-            cancelText={cancelText ?? "Cerrar"}
-            submitText=""
+            onSubmit={() => deleteVacation(vacation)}
+            submitText="Eliminar"
+            cancelText="Cancelar"
             baseURL={baseURL}
-            submitable={false}
-            onSubmit={() => { }}
+            submitable={true}
         >
             <div className="flex flex-col gap-2">
-                {vacations.map((vacation) => (
-                    <div key={vacation.id} className="flex gap-2">
-                        <p>Inicio: {vacation.start_date.toISOString().split("T")[0]}</p>
-                        <p>Fin: {vacation.end_date.toISOString().split("T")[0]}</p>
-                        <DeleteButton onClick={() => {
-                            console.log("Eliminando vacaciones",vacation);
-                            deleteVacations(vacation)}}>Eliminar</DeleteButton>
-                    </div>
-                ))}
+                <p>Se van a eliminar las vacaciones del dia {formatDate(vacation.start_date)} al {formatDate(vacation.end_date)}. ¿Estás seguro?</p>
             </div>
         </Modal>
-    )}</div>);
+    )
 }
