@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { Employee } from "@/app/lib/definitions";
+import { useEffect, useState } from "react";
+import { Company, Employee } from "@/app/lib/definitions";
 import { Modal } from "@/app/ui/modal";
+import { companies } from "../lib/placeholder-data";
 
 
 
@@ -36,6 +37,41 @@ function EmployeeTimeField({ text, value, onChange }: { text: string, value: str
     );
 }
 
+// Employee Company selector to change the company of the employee, I want it to be a dropdown
+
+function EmployeeCompanyField({ text, value, onChange }: { text: string, value: number, onChange: (e: any) => void }) {
+    const [companies, setCompanies] = useState<Company[]>([]);
+    const [selectedCompany, setSelectedCompany] = useState<string>(value.toString());
+    const handleCompanyChange = (e: any) => {
+        setSelectedCompany(e.target.value);
+        onChange(e);
+    };
+    useEffect(() => {
+        fetch("/api/v0/companies")
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                setCompanies(data);
+            });
+    }, []);
+    return (
+        <div className="flex justify-between gap-10 items-center">
+            <label className="">{text}</label>
+            <select
+                id="companySelect"
+                value={selectedCompany}
+                onChange={handleCompanyChange}
+                className="border border-gray-300 rounded p-2 w-48 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+                {companies.map((company, index) => (
+                    <option key={index} value={company.id} className="text-gray-700">
+                        {company.name} - {company.cif}
+                    </option>
+                ))}
+            </select>
+        </div>
+    );
+}
 
 export function EmployeeModal({ title, baseURL, companyId, handleSubmitEmployee, initialEmployee =
     {
@@ -113,6 +149,10 @@ cancelText, submitText }: { title: string, baseURL: string, companyId: number, h
                     type="text"
                     value={employee.nss}
                     onChange={(e) => setEmployee({ ...employee, nss: e.target.value })} />
+                <EmployeeCompanyField
+                    text="Empresa"
+                    value={employee.companyId}
+                    onChange={(e) => setEmployee({ ...employee, companyId: e.target.value })} />
                 <div className="flex gap-2">
                     <p className="mr-auto">Lunes</p>
                     <EmployeeTimeField
