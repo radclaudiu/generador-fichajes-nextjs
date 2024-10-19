@@ -115,7 +115,7 @@ export default async function EmployeesPage({ searchParams, params }: { searchPa
                   <p>NSS: {employee.nss}</p>
                 </div>
                 <div className="flex flex-col min-w-40 gap-2">
-                  <Link className="text-xs size-fit bg-green-500 hover:bg-green-600 text-white p-1 rounded" href={`${baseURL}?edit=${employee.id}`} >EDITAR HORARIO</Link>
+                  <Link className="text-xs size-fit bg-green-500 hover:bg-green-600 text-white p-1 rounded" href={`${baseURL}?edit=${employee.id}`} >EDITAR EMPLEADO</Link>
                   <Link className="text-xs size-fit bg-blue-600 hover:bg-blue-700 text-white p-1 rounded" href={`${baseURL}?createVacationsModal=${employee.id}`} >AGREGAR VACACIONES</Link>
                   <Link className="text-xs size-fit bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded" href={`${baseURL}?generateChecksModal=${employee.id}`} >GENERAR FICHAJES</Link>
                   <Link className="text-xs size-fit bg-red-500 hover:bg-red-600 text-white p-1 rounded" href={`${baseURL}?delete=${employee.id}`} >ELIMINAR EMPLEADO</Link>
@@ -151,7 +151,7 @@ export default async function EmployeesPage({ searchParams, params }: { searchPa
           } submitText="Editar" />
         )}
         {deleteId && employees.find((emp) => emp.id === parseInt(deleteId)) && (
-          <EmployeeModal title="Eliminar empresa" baseURL={baseURL} companyId={params.companyId} handleSubmitEmployee={handleDeleteEmployee} initialEmployee={
+          <EmployeeModal title="Eliminar empleado" baseURL={baseURL} companyId={params.companyId} handleSubmitEmployee={handleDeleteEmployee} initialEmployee={
             employees.find((emp) => emp.id === parseInt(deleteId))
           } deleteEmployee={true} />
         )}
@@ -159,7 +159,7 @@ export default async function EmployeesPage({ searchParams, params }: { searchPa
           <ChecksModal title="Generar fichajes" baseURL={baseURL} company={company} employee={employees.find((emp) => emp.id === parseInt(generateChecksModal))!} />
         )}
         {createVacationsModal && employees.find((emp) => emp.id === parseInt(createVacationsModal)) && (
-          <VacationsModal title="Crear vacaciones" baseURL={baseURL} employee={employees.find((emp) => emp.id === parseInt(createVacationsModal))!} handleSubmitVacations={handleSubmitVacations} />
+          <VacationsModal title="Agregar vacaciones" baseURL={baseURL} employee={employees.find((emp) => emp.id === parseInt(createVacationsModal))!} handleSubmitVacations={handleSubmitVacations} />
         )}
         {deleteVacation && deleteEmployeeVacation && selectedVacation && <DeleteVacationModal title="Eliminar vacaciones" baseURL={baseURL} vacation={selectedVacation} deleteVacation={handleDeleteVacation} />}
       </section>
