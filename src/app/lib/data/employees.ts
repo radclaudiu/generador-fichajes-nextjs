@@ -53,8 +53,10 @@ export async function fetchEmployeeChecks(employeeId: number): Promise<Check[]> 
 export async function updateEmployee(employeeId: number, employee: Employee): Promise<Employee> {    
 
     try {
+        const initialCompany = await fetchCompanyByEmployee(employeeId);
         const data = await sql<Employee>`UPDATE employees SET name = ${employee.name}, dni = ${employee.dni},nss = ${employee.nss},company_id = ${employee.companyId}, monday_in = ${employee.monday_in || null}, monday_out = ${employee.monday_out || null}, tuesday_in = ${employee.tuesday_in || null}, tuesday_out = ${employee.tuesday_out || null}, wednesday_in = ${employee.wednesday_in || null}, wednesday_out = ${employee.wednesday_out || null}, thursday_in = ${employee.thursday_in || null}, thursday_out = ${employee.thursday_out || null}, friday_in = ${employee.friday_in || null}, friday_out = ${employee.friday_out || null}, saturday_in = ${employee.saturday_in || null}, saturday_out = ${employee.saturday_out || null}, sunday_in = ${employee.sunday_in || null}, sunday_out = ${employee.sunday_out || null} WHERE id = ${employeeId} RETURNING *`;
         revalidatePath(`/companies/${employee.companyId}/employees`);
+        revalidatePath(`/companies/${initialCompany?.id}/employees`);
         return data.rows[0];
     } catch (error) {
         console.log('Database Error Updating Employee:', error);
